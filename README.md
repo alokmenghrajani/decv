@@ -1,7 +1,7 @@
 # Deterministic ECDSA Cross Validation (DECV)
 
-The purpose of this repo is to cross validate various different deterministic ECDSA signing libraries (
-[libsecp256k1](https://github.com/bitcoin-core/secp256k1), [OpenSSL](https://github.com/openssl/openssl),
+The purpose of this repo is to cross validate various different deterministic ECDSA implementations
+([libsecp256k1](https://github.com/bitcoin-core/secp256k1), [OpenSSL](https://github.com/openssl/openssl),
 [Trezor](https://github.com/trezor/trezor-firmware)). By verifying that each library produces the exact same
 signatures for a large number of test vectors, we are able to confirm (with a high degree of confidence) that each
 library is both correct and lacks subliminal channels (also known as kleptograms).
@@ -10,12 +10,14 @@ We focus on curve [secp256k1](https://en.bitcoin.it/wiki/Secp256k1) since our ap
 transactions. Deterministic ECDSA is defined in [rfc6979](https://tools.ietf.org/html/rfc6979).
 
 An ECDSA signature is represented as a pair of values (r, s). All implementations must generate the same r. However,
-there exists two valid values for s (s and -s mod n, where n is the order of the group). Another Bitcoin-centric
+there exists two valid values for s: s and -s mod n (where n is the order of the group). Another Bitcoin-centric
 decision is to always pick the lower s (see [BIP: 62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki), [BIP: 146](https://github.com/bitcoin/bips/blob/master/bip-0146.mediawiki)).
 
-The code uses libsecp256k1 to generate test vectors. The test vectors can be saved to a file or can be streamed to
-the other implementations. The test vectors also contain BIP32 derivations, which enables writing validation code which
+python/decv.py is used to generate test vectors. These test vectors can be saved to a file or can be streamed to any
+other implementation. The test vectors also contain BIP32 derivations, which enables writing validation code which
 is as close as feasible to actual Bitcoin wallet code.
+
+To learn more about ECDSA backdoors: ["Wallet Security" by Stephan Verbücheln](https://media.ccc.de/v/35c3-9492-wallet_security), ["Deterministic Signatures, Subliminal channels and Hardware wallets" by Sergio Demian Lerner](https://bitslog.com/2014/06/09/deterministic-signatures-subliminal-channels-and-hardware-wallets/).
 
 Note:
 - libsecp256k1 and OpenSSL are used via [pycoin](https://github.com/richardkiss/pycoin), a python library.
@@ -24,7 +26,9 @@ Note:
 # Running
 
 The easiest way to run the code is to use [Docker](https://www.docker.com/), as following. The code should run fine
-without Docker, as long as the various dependencies are available.
+without Docker, as long as the various dependencies are available. It is recommended that you validate your crypto
+library in an environment identical to your production environment (i.e. it's preferable to validate hardware wallets on
+the actual hardware since the underlying library might run different code paths on different processors).
 
     $ docker build -t decv . && docker run --rm -it decv
     # ./python/decv.py --libsecp256k1 generate 10000 | ./python/decv.py --libsecp256k1 verify
@@ -37,7 +41,8 @@ without Docker, as long as the various dependencies are available.
 
 # Test vector format
 
-The test vector is emitted using a comma separated values (CSV), as following:
+The test vectors are emitted using comma separated values (CSV). See following table for the field names and one sample
+row.
 
 | seed (hex) | chain | ext pub (base58) | ext priv (base58) | hash of message (hex) | signature (DER encoded, low s, hex) |
 |------------|-------|------------------|-------------------|-----------------------|-------------------------------------|
