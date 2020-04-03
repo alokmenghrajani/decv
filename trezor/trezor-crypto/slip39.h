@@ -1,6 +1,7 @@
 /**
- * Copyright (c) 2013-2014 Tomas Dzetkulic
- * Copyright (c) 2013-2014 Pavol Rusnak
+ * This file is part of the TREZOR project, https://trezor.io/
+ *
+ * Copyright (c) SatoshiLabs
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -21,32 +22,15 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __BIP39_H__
-#define __BIP39_H__
-
 #include <stdbool.h>
 #include <stdint.h>
 
-#define BIP39_WORDS 2048
-#define BIP39_PBKDF2_ROUNDS 2048
+const char* get_word(uint16_t index);
 
-const char *mnemonic_generate(int strength);  // strength in bits
-const char *mnemonic_from_data(const uint8_t *data, int len);
-void mnemonic_clear(void);
+bool word_index(uint16_t* index, const char* word, uint8_t word_length);
 
-int mnemonic_check(const char *mnemonic);
+uint16_t compute_mask(uint16_t prefix);
 
-int mnemonic_to_entropy(const char *mnemonic, uint8_t *entropy);
+const char* button_sequence_to_word(uint16_t prefix);
 
-// passphrase must be at most 256 characters otherwise it would be truncated
-void mnemonic_to_seed(const char *mnemonic, const char *passphrase,
-                      uint8_t seed[512 / 8],
-                      void (*progress_callback)(uint32_t current,
-                                                uint32_t total));
-
-int mnemonic_find_word(const char *word);
-const char *mnemonic_complete_word(const char *prefix, int len);
-const char *mnemonic_get_word(int index);
-uint32_t mnemonic_word_completion_mask(const char *prefix, int len);
-
-#endif
+uint16_t find(uint16_t prefix, bool find_index);

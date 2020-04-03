@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Anatolii Kurotych
+ * Copyright (c) 2019 Andrew R. Kozlik
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -20,23 +20,24 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __SCHNORR_H__
-#define __SCHNORR_H__
+#ifndef __HMAC_DRBG_H__
+#define __HMAC_DRBG_H__
 
-#include "ecdsa.h"
+#include <sha2.h>
+#include <stdint.h>
 
-// result of sign operation
-typedef struct {
-  bignum256 r, s;
-} schnorr_sign_pair;
+// HMAC based Deterministic Random Bit Generator with SHA-256
 
-// sign/verify returns 0 if operation succeeded
+typedef struct _HMAC_DRBG_CTX {
+  uint32_t odig[SHA256_DIGEST_LENGTH / sizeof(uint32_t)];
+  uint32_t idig[SHA256_DIGEST_LENGTH / sizeof(uint32_t)];
+  uint32_t v[SHA256_BLOCK_LENGTH / sizeof(uint32_t)];
+} HMAC_DRBG_CTX;
 
-// k is a random from [1, ..., order-1]
-int schnorr_sign(const ecdsa_curve *curve, const uint8_t *priv_key,
-                 const bignum256 *k, const uint8_t *msg, const uint32_t msg_len,
-                 schnorr_sign_pair *result);
-int schnorr_verify(const ecdsa_curve *curve, const uint8_t *pub_key,
-                   const uint8_t *msg, const uint32_t msg_len,
-                   const schnorr_sign_pair *sign);
+void hmac_drbg_init(HMAC_DRBG_CTX *ctx, const uint8_t *buf, size_t len,
+                    const uint8_t *nonce, size_t nonce_len);
+void hmac_drbg_reseed(HMAC_DRBG_CTX *ctx, const uint8_t *buf, size_t len,
+                      const uint8_t *addin, size_t addin_len);
+void hmac_drbg_generate(HMAC_DRBG_CTX *ctx, uint8_t *buf, size_t len);
+
 #endif
