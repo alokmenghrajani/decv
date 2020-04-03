@@ -36,7 +36,13 @@ the actual hardware since the underlying library might run different code paths 
     # ./python/decv.py --libsecp256k1 generate 10000 | ./python/decv.py --openssl verify
     verified: 10000 signatures    
     # ./python/decv.py --libsecp256k1 generate 10000 | ./trezor/build/decv
-    verified: 10000 signatures    
+    verified: 10000 signatures
+    # cat bip32_test_vectors.csv | ./python/decv.py --libsecp256k1 verify
+    verified: 14 signatures
+    # cat bip32_test_vectors.csv | ./python/decv.py --openssl verify
+    verified: 14 signatures
+    # cat bip32_test_vectors.csv | ./trezor/build/decv
+    verified: 14 signatures
     # exit
 
 # Test vector format

@@ -13,4 +13,6 @@ RUN mkdir /trezor/build && \
     cmake ../ && \
     make
 
+COPY bip32_test_vectors.csv /bip32_test_vectors.csv
+
 CMD /bin/bash

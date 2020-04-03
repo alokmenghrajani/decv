@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     // read and process chain
     pos = csv_next(buf, chain_str); buf += pos + 1;
     char *chain = chain_str + 1;
-    uint32_t fingerprint;
+    uint32_t fingerprint = 0;
     while (*chain == '/') {
       fingerprint = hdnode_fingerprint(&node);
       chain++;
