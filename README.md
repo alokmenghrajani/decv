@@ -48,6 +48,14 @@ row.
 |------------|-------|------------------|-------------------|-----------------------|-------------------------------------|
 | 78c72a6f7a2a488de34a11c1a7de6ab97133d321 | m/0'/50/41/168'/115 | xpub6FRofRU8HUx9T1cZLAvV46p7EsKL4TK4NXq2H2iVLn2CYBcTUaNbftBMZT9qqEnynndSZVVJhWwJKhER99Sa3Tjt5pS3CnBrrna4bhCNexV | xprvA2STFuwET7PrEXY6E9PUgxsNgqUqezbD1JuRUeJsnSVDfPHJw34M85rsiBjERcEkunJ3kZ4N2Lg5xbbQ3UuastcwHVoF2H2ohpfSc4xV2GL | bd7b0690546402a37af52e513bcdf965c15c4757e82354944552140727e08ede | 304402201e924d772d72030794b25ea216298b57cbc09003f1db90691da1bfe1e292bd850220676f325432f9d14e7873cc64ea74ad88138c8e9a1793931a457523d7f7e4a79a |
 
+# Cross Validated Implementations
+
+| Library       | Version                                  |
+|---------------|------------------------------------------|
+| OpenSSL       | 1.1.1d                                   |
+| libsecp256k1  | 0.1~20170810-2                           |
+| trezor-crypto | e6d884b145d0fb6201c0ae76c552547028793df9 |
+
 # Future work
 
 This project is considered complete and no future work is planned. However, we welcome pull requests which verify
