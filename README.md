@@ -1,23 +1,25 @@
 # Deterministic ECDSA Cross Validation (DECV)
 
-The purpose of this repo is to cross validate various different deterministic ECDSA implementations
+The purpose of DECV is to cross validate various different deterministic ECDSA implementations
 ([libsecp256k1](https://github.com/bitcoin-core/secp256k1), [OpenSSL](https://github.com/openssl/openssl),
-[Trezor](https://github.com/trezor/trezor-firmware)). By verifying that each library produces the exact same
-signatures for a large number of test vectors, we are able to confirm (with a high degree of confidence) that each
-library is both correct and lacks subliminal channels (also known as kleptograms).
+[Trezor](https://github.com/trezor/trezor-firmware)). By verifying that each library produces the exact same signatures
+for a large number of test vectors, we are able to confirm (with a high degree of confidence) that each library is both
+correct and lacks subliminal channels (also known as kleptograms). To learn more about ECDSA backdoors, see
+["Wallet Security" by Stephan Verbücheln](https://media.ccc.de/v/35c3-9492-wallet_security) and ["Deterministic
+Signatures, Subliminal channels and Hardware wallets" by Sergio Demian
+Lerner](https://bitslog.com/2014/06/09/deterministic-signatures-subliminal-channels-and-hardware-wallets/).
 
 We focus on curve [secp256k1](https://en.bitcoin.it/wiki/Secp256k1) since our application is signing Bitcoin
 transactions. Deterministic ECDSA is defined in [rfc6979](https://tools.ietf.org/html/rfc6979).
 
 An ECDSA signature is represented as a pair of values (r, s). All implementations must generate the same r. However,
 there exists two valid values for s: s and -s mod n (where n is the order of the group). Another Bitcoin-centric
-decision is to always pick the lower s (see [BIP: 62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki), [BIP: 146](https://github.com/bitcoin/bips/blob/master/bip-0146.mediawiki)).
+decision is to always pick the lower s (see [BIP: 62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki),
+[BIP: 146](https://github.com/bitcoin/bips/blob/master/bip-0146.mediawiki)).
 
 python/decv.py is used to generate test vectors. These test vectors can be saved to a file or can be streamed to any
 other implementation. The test vectors also contain BIP32 derivations, which enables writing validation code which
 is as close as feasible to actual Bitcoin wallet code.
-
-To learn more about ECDSA backdoors: ["Wallet Security" by Stephan Verbücheln](https://media.ccc.de/v/35c3-9492-wallet_security), ["Deterministic Signatures, Subliminal channels and Hardware wallets" by Sergio Demian Lerner](https://bitslog.com/2014/06/09/deterministic-signatures-subliminal-channels-and-hardware-wallets/).
 
 Note:
 - libsecp256k1 and OpenSSL are used via [pycoin](https://github.com/richardkiss/pycoin), a python library.
@@ -62,7 +64,11 @@ row.
 | libsecp256k1  | 0.1~20170810-2                           |
 | trezor-crypto | e6d884b145d0fb6201c0ae76c552547028793df9 |
 
-# Future work
+# Releated and Future work
 
-This project is considered complete and no future work is planned. However, we welcome pull requests which verify
+If you found DECV interesting or useful, you should check out [Project Wycheproof](https://github.com/google/wycheproof)
+and [Cryptofuzz - Differential cryptography fuzzing](https://github.com/guidovranken/cryptofuzz). Both project, using
+different methodologies, look for bugs in cryptographic libraries.
+
+At this point, DECV is considered complete and no future work is planned. However, we welcome pull requests which verify
 additional libraries or which verify existing libraries using different programming language wrappers.
